@@ -12,8 +12,7 @@ def get_UN_data():
     file = st.file_uploader("Selecciona archivo" ,['csv','txt'])
     if file is not None:
         df = pd.read_csv(file)
-        ix = st.selectbox("Selecciona índice", df.columns)
-        return df.set_index(ix)
+        return df
 
 def local_css(file_name):
     with open(file_name) as f:
@@ -25,7 +24,7 @@ try:
     df = get_UN_data()
     if str(df) != 'None':
         only_h = st.radio("Solo cabecera:", ["Sí", "No"])
-        if only_h == "yes": 
+        if only_h == "Sí": 
             st.write("### Dataframe head", df.head().sort_index())
         else:
             st.write("### Dataframe", df.sort_index())
@@ -70,17 +69,35 @@ try:
             atipicos = st.multiselect("¿Qué variables te gustaría revisar?: ", df.columns)
             for col in atipicos:
                 plt.clf()
+                plt.figure(figsize=(6,3))
                 sns.boxplot(col, data=df)
                 st.pyplot(plt)
             st.write("### Distribución de variables categóricas")
             col_catdescribe, col_catplot = st.columns(2)
             with col_catdescribe:
                 st.caption("Resumen estadístico de variables categóricas:")
-                st.write(df.describe(include=['object']))
+                df_cat = df.select_dtypes(include='object')
+                st.write(df_cat)
+            with col_catplot:
+                st.caption("Histográmas variables categóricas:")
+                for col in df_cat:
+                    plt.clf()
+                    if df_cat[col].nunique()<10:
+                        plt.figure(figsize=(6,3))
+                        sns.countplot(y=col, data=df_cat)
+                        st.pyplot(plt)
            
         with st.container():
             st.write("## Relación entre pares de variables")
-            
+            col_matcorr, col_heatmap = st.columns(2)
+            with col_matcorr:
+                st.caption("Matriz de correlación: ")
+                st.write(df.corr())
+            with col_heatmap:
+                plt.clf()
+                plt.figure(figsize=(14,12))
+                sns.heatmap(df.corr(), cmap='RdBu_r', annot=True)
+                st.pyplot(plt)
 
     else:
         st.error(
@@ -88,8 +105,6 @@ try:
         Dataframe no seleccionado
     """
     )
-
-        
 
 except URLError as e:
     st.error(
