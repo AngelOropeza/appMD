@@ -80,7 +80,7 @@ try:
                 sep = col_sep.text_input("Separador: ", value=',', max_chars=2)
                 df_name = col_name.text_input("Nombre: ", value='output')
                 csv = final_df.to_csv().encode('utf-8')
-                st.download_button("Descargar dataset", data=csv, file_name="{}.csv".format(df_name))
+                st.download_button("Descargar dataset modificado", data=csv, file_name="{}.csv".format(df_name))
 
     else: 
         st.error(
