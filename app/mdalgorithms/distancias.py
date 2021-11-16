@@ -1,32 +1,15 @@
 import streamlit as st
 import pandas as pd
-import altair as alt
-import io
-import matplotlib.pyplot as plt
-import numpy as np
-import seaborn as sns
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from sklearn.preprocessing import StandardScaler
 from scipy.spatial.distance import cdist    # Para el cálculo de distancias
-from scipy.spatial import distance
 
 from urllib.error import URLError
 
-def get_UN_data():
-    file = st.file_uploader("Selecciona archivo" ,['csv','txt'])
-    if file is not None:
-        df = pd.read_csv(file)
-        return df
-
-def local_css(file_name):
-    with open(file_name) as f:
-        st.markdown('<style>{}</style>'.format(f.read()), unsafe_allow_html=True)
-
-def distancias():
-    distancias = ['Euclidiana', 'Chebyshev', 'Manhattan', 'Minkowski']
+def distancias(df):
     try:
+        distancias = ['Euclidiana', 'Chebyshev', 'Manhattan', 'Minkowski']
         st.title("Métricas de distancia")
         st.write("## Selección de datos")
-        df = get_UN_data()
         if str(df) != 'None':
             only_h = st.radio("Solo cabecera:", ["Sí", "No"])
             if only_h == "Sí": 
@@ -65,9 +48,6 @@ def distancias():
                     DstMinkowski = cdist(MEstandarizada, MEstandarizada, metric='minkowski', p=1.5)
                     MMinkowski = pd.DataFrame(DstMinkowski)
                     st.write(MMinkowski.round(3))
-                    
-
-
         else:
             st.error(
             """
@@ -84,6 +64,3 @@ def distancias():
         """
             % e.reason
         )
-
-
-distancias()
