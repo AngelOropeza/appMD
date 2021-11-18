@@ -5,15 +5,18 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from urllib.error import URLError
 
+
 def local_css(file_name):
     with open(file_name) as f:
-        st.markdown('<style>{}</style>'.format(f.read()), unsafe_allow_html=True)
+        st.markdown('<style>{}</style>'.format(f.read()),
+                    unsafe_allow_html=True)
+
 
 def eda(df):
     try:
         st.title("ANÁLISIS EXPLORATORIO DE DATOS")
         only_h = st.radio("Solo cabecera:", ["Sí", "No"])
-        if only_h == "Sí": 
+        if only_h == "Sí":
             st.write("### Dataframe head", df.head().sort_index())
         else:
             st.write("### Dataframe", df.sort_index())
@@ -26,8 +29,8 @@ def eda(df):
                 tipos = [str(tipo) for tipo in df.dtypes]
                 st.write("Tipos de datos (variables): ")
                 st.write(pd.DataFrame({
-                    'Variable':df.columns,
-                    'Tipo':tipos
+                    'Variable': df.columns,
+                    'Tipo': tipos
                 }))
         with st.container():
             st.write("## Identificación de datos faltantes")
@@ -36,8 +39,8 @@ def eda(df):
                 nulls_list = [str(null_c) for null_c in df.isnull().sum()]
                 st.caption("La suma de elementos nulos por columnas es:")
                 st.write(pd.DataFrame({
-                    'Variable':df.columns,
-                    '# nulls':nulls_list
+                    'Variable': df.columns,
+                    '# nulls': nulls_list
                 }))
             with col_infodf:
                 st.caption("Información relevante del dataframe:")
@@ -49,16 +52,17 @@ def eda(df):
             st.write("## Detección de valores atípicos")
             st.write("### Distribución de variables numéricas")
             st.caption("Histográmas por variable:")
-            df.hist(figsize=(14,14), xrot=45)
+            df.hist(figsize=(14, 14), xrot=45)
             st.pyplot(plt)
             st.write("### Resumen estadístico de variables numéricas")
             st.caption("Resumen estadístico por variables:")
             st.write(df.describe())
             st.write("### Posibles valores atípicos")
-            atipicos = st.multiselect("¿Qué variables te gustaría revisar?: ", df.columns)
+            atipicos = st.multiselect(
+                "¿Qué variables te gustaría revisar?: ", df.columns)
             for col in atipicos:
                 plt.clf()
-                plt.figure(figsize=(6,3))
+                plt.figure(figsize=(6, 3))
                 sns.boxplot(col, data=df)
                 st.pyplot(plt)
             st.write("### Distribución de variables categóricas")
@@ -71,11 +75,11 @@ def eda(df):
                 st.caption("Histográmas variables categóricas:")
                 for col in df_cat:
                     plt.clf()
-                    if df_cat[col].nunique()<10:
-                        plt.figure(figsize=(6,3))
+                    if df_cat[col].nunique() < 10:
+                        plt.figure(figsize=(6, 3))
                         sns.countplot(y=col, data=df_cat)
                         st.pyplot(plt)
-        
+
         with st.container():
             st.write("## Relación entre pares de variables")
             col_matcorr, col_heatmap = st.columns(2)
@@ -84,7 +88,7 @@ def eda(df):
                 st.write(df.corr())
             with col_heatmap:
                 plt.clf()
-                plt.figure(figsize=(14,12))
+                plt.figure(figsize=(14, 12))
                 sns.heatmap(df.corr(), cmap='RdBu_r', annot=True)
                 st.pyplot(plt)
 

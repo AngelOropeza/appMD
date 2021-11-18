@@ -1,37 +1,38 @@
 import streamlit as st
 import pandas as pd
-import mdalgorithms.acd
-import mdalgorithms.cjerarquico
-import mdalgorithms.cparticional
-import mdalgorithms.distancias
-import mdalgorithms.eda
-import mdalgorithms.mdapriori
+from mdalgorithms import acd
+from mdalgorithms import eda
+from mdalgorithms import distancias
+from mdalgorithms import cjerarquico
+from mdalgorithms import cparticional
+from mdalgorithms import mdapriori
 from urllib.error import URLError
 
-algorithms = ["EDA", "ACD", "Distancias", "Clustering Jerárquico", "Clustering Particional", "Apriori"]
+algorithms = ["EDA", "ACD", "Distancias",
+              "Clustering Jerárquico", "Clustering Particional", "Apriori"]
 
 try:
-    st.sidebar.image("img\logo1.jpg",width=300)
+    st.sidebar.image("img\logo1.jpg", width=300)
     st.sidebar.title("MD APPv2")
     st.sidebar.text("App created to apply and provide DM algorithms")
     page_selected = st.sidebar.radio("ALGORITHMS:", algorithms)
-    file = st.sidebar.file_uploader("Selecciona archivo" ,['csv','txt'])
+    file = st.sidebar.file_uploader("Selecciona archivo", ['csv', 'txt'])
     if file is not None:
         df = pd.read_csv(file)
         if page_selected == "EDA":
-            mdalgorithms.eda(df)
+            eda.eda(df)
         elif page_selected == "ACD":
-            mdalgorithms.acd(df)
+            acd.acd(df)
         elif page_selected == "Distancias":
-            mdalgorithms.distancias(df)
+            distancias.distancias(df)
         elif page_selected == "Clustering Jerárquico":
-            mdalgorithms.clustering_jerarquico(df)
+            cjerarquico.clustering_jerarquico(df)
         elif page_selected == "Clustering Particional":
-            mdalgorithms.clustering_particional(df)
+            cparticional.clustering_particional(df)
         elif page_selected == "Apriori":
-            mdalgorithms.algoritmoapriori(df)
+            mdapriori.algoritmoapriori(df)
     else:
-            st.error(
+        st.error(
             """
             Dataframe no seleccionado :(
         """
