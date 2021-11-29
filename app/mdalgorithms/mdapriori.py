@@ -32,9 +32,9 @@ def algoritmoapriori(df):
                 col_sup, col_conf, col_lif = st.columns(3)
                 with st.form("my_form"):
                     with col_sup:
-                        min_support = st.number_input("Soporte")
+                        min_support = st.number_input("Soporte", format="%.4f")
                     with col_conf:
-                        min_confidence = st.number_input("Confianza")
+                        min_confidence = st.number_input("Confianza", format="%.4f")
                     with col_lif:
                         min_lift = st.number_input("Elevación", step=1)
                     submitted = st.form_submit_button("Calcular reglas")
