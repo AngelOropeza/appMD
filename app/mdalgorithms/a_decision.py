@@ -1,9 +1,7 @@
-from typing import final
 import pandas as pd
 import numpy as np
 import streamlit as st
 import matplotlib.pyplot as plt
-import seaborn as sns
 from urllib.error import URLError
 from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier, export_text
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score, classification_report

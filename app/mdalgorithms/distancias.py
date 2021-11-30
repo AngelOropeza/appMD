@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
-from scipy.spatial.distance import cdist    # Para el cálculo de distancias
+from scipy.spatial.distance import cdist 
 
 from urllib.error import URLError
 
